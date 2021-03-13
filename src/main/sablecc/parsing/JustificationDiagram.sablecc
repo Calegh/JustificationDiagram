@@ -1,0 +1,49 @@
+Package sablecc.syntax;
+
+// This grammar is strongly inspired from PlantUML's object and class diagram syntaxes.
+
+Helpers
+
+    letter = ['a'..'z'] + ['A'..'Z'];
+    digit = ['0'..'9'];
+    newline = 13 | 10 | 13 10;
+    tab = '9';
+    string_char = [[32..127] - [13 + 10]];
+
+Tokens
+
+    start = '@startuml';
+    end = '@enduml';
+    conclusion_tag = 'conclusion';
+    title = 'title ' (letter | digit | ' ')+ newline;
+    alias = (letter | digit)+;
+    link = ('-->' | '..>');
+    type = ('subconclusion' | 'strategy' | 'rationale' | 'domain' | 'support');
+    string = '"' string_char* '"';
+    whitespace = (' ' | newline | tab)+;
+    assign = '=';
+    separator = '-';
+
+
+Productions
+
+diagram =
+    start title? instruction* end;
+
+instruction =
+    {declaration} declaration |
+    {relation} relation;
+
+declaration =
+    {element} element |
+    {conclusion} conclusion_tag;
+
+element =
+    type alias assign [label]:string;
+
+conclusion =
+    {conclusion_without_restriction} conclusion alias assign [label]:string |
+    {conclusion_with_restriction} conclusion alias assign [label]:string separator [restriction]:string;
+
+relation =
+    [left]:alias link [right]:alias;
