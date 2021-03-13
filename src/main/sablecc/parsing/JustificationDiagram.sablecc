@@ -6,9 +6,12 @@ Helpers
 
     letter = ['a'..'z'] + ['A'..'Z'];
     digit = ['0'..'9'];
+    character = [0..0xFFFF];
     newline = 13 | 10 | 13 10;
     tab = '9';
-    string_char = [[32..127] - [13 + 10]];
+    escape = '\';
+    string_char = [character - [13 + 10]];
+    not_escape_quote_string_char = [string_char - [escape + '"']];
 
 Tokens
 
@@ -19,7 +22,7 @@ Tokens
     alias = (letter | digit)+;
     link = ('-->' | '..>');
     type = ('subconclusion' | 'strategy' | 'rationale' | 'domain' | 'support');
-    string = '"' string_char* '"';
+    string = '"' (not_escape_quote_string_char? (escape string_char)?)* '"';
     whitespace = (' ' | newline | tab)+;
     assign = '=';
     separator = '-';
