@@ -18,12 +18,12 @@ or [download the jar file](https://github.com/ace-design/JustificationDiagram/re
 ## Execution
 From the cloned repo, run 
 ```
-mvn exec:java -Dexec.mainClass="JDCompiler" [OPTIONS] [FILE]
+mvn exec:java -Dexec.mainClass="JDCompiler"  -Dexec.args="[OPTIONS] FILE"
 ```
 
 or execute the jar file with 
 ```
-java -jar JDGenerator-jar-with-dependencies.jar [OPTIONS] [FILE]
+java -jar JDGenerator-jar-with-dependencies.jar [OPTIONS] FILE
 ```
 
 ### Options
