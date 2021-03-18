@@ -1,0 +1,42 @@
+@startuml
+!include commons.style
+
+title Justification Diagram Compiler (Antlr4 junction)
+center footer ACE - Corinne Pulgar
+
+package antlr4.parsing {
+
+    interface JustificationDiagramBaseVisitor { }
+
+    interface JustificationDiagramVisitor {
+         + visitDiagram()
+         + visitDeclaration()
+         + visitRelation()
+         + visitInstruction()
+         + visitElement()
+         + visitConclusion()
+    }
+
+}
+
+package parsing {
+
+    class JDInitializer { }
+
+    class JDLinker { }
+
+}
+
+package justificationDiagram {
+
+    class JustificationDiagram { }
+
+}
+
+    JustificationDiagramBaseVisitor -.up.|> JustificationDiagramVisitor
+    JDLinker -.up.|> JustificationDiagramBaseVisitor
+    JDInitializer -.up.|> JustificationDiagramBaseVisitor
+    JDLinker o-- JustificationDiagram
+    JDInitializer o-- JustificationDiagram
+
+@enduml
