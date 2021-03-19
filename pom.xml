@@ -18,6 +18,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.verylazyboy</groupId>
+            <artifactId>sablecc-maven-plugin</artifactId>
+            <version>2.0-beta.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.verylazyboy</groupId>
+            <artifactId>sablecc-maven-port</artifactId>
+            <version>3.7</version>
+        </dependency>
+        <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>4.8</version>
@@ -64,6 +74,22 @@
     <build>
         <finalName>JDGenerator</finalName>
         <plugins>
+            <plugin>
+                <groupId>com.github.verylazyboy</groupId>
+                <artifactId>sablecc-maven-plugin</artifactId>
+                <version>2.0-beta.2</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <grammar>src/main/sablecc/parsing/JustificationDiagram.sablecc</grammar>
+                            <destination>src/main</destination>
+                        </configuration>
+                        <goals>
+                            <goal>sablecc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
