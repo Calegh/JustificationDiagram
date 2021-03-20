@@ -1,0 +1,51 @@
+@startuml
+!include commons.style
+
+title Justification Diagram Compiler (Sablecc junction)
+center footer ACE - Corinne Pulgar
+
+package sablecc.syntax {
+
+    interface Analysis {
+        + caseADiagram()
+        + caseADeclaration()
+        + caseARelation()
+        + caseAInstruction()
+        + caseAElement()
+        + caseAConclusion()
+    }
+
+    class AnalysisAdapter { }
+
+    class DepthFirstAdapter { }
+
+}
+
+package parsing {
+
+    interface Initializer { }
+
+    interface Linker { }
+
+    class SableccInitializer { }
+
+    class SableccLinker { }
+
+}
+
+package justificationDiagram {
+
+    class JustificationDiagram { }
+
+}
+
+    AnalysisAdapter .up.|> Analysis
+    DepthFirstAdapter .up.|> AnalysisAdapter
+    SableccInitializer .up.|> Initializer
+    SableccLinker .up.|> Linker
+    SableccInitializer -up-|> DepthFirstAdapter
+    SableccLinker -up-|> DepthFirstAdapter
+    SableccInitializer o-- JustificationDiagram
+    SableccLinker o-- JustificationDiagram
+
+@enduml

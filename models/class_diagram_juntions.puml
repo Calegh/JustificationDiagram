@@ -1,7 +1,7 @@
 @startuml
 !include commons.style
 
-title Justification Diagram Compiler (Antlr4 junction)
+title Justification Diagram Compiler (Junctions)
 center footer ACE - Corinne Pulgar
 
 package antlr4.parsing {
@@ -19,6 +19,23 @@ package antlr4.parsing {
 
 }
 
+package sablecc.syntax {
+
+    interface Analysis {
+        + caseADiagram()
+        + caseADeclaration()
+        + caseARelation()
+        + caseAInstruction()
+        + caseAElement()
+        + caseAConclusion()
+    }
+
+    class AnalysisAdapter { }
+
+    class DepthFirstAdapter { }
+
+}
+
 package parsing {
 
     interface Initializer { }
@@ -29,6 +46,10 @@ package parsing {
 
     class AntlrLinker { }
 
+    class SableccInitializer { }
+
+    class SableccLinker { }
+
 }
 
 package justificationDiagram {
@@ -37,12 +58,18 @@ package justificationDiagram {
 
 }
 
+    AnalysisAdapter .up.|> Analysis
+    DepthFirstAdapter .up.|> AnalysisAdapter
     JustificationDiagramBaseVisitor -.up.|> JustificationDiagramVisitor
     AntlrInitializer -up-|> JustificationDiagramBaseVisitor
     AntlrLinker -up-|> JustificationDiagramBaseVisitor
     AntlrInitializer .up.|> Initializer
-    AntlrLinker .up.|> Linker
-    AntlrInitializer o-- JustificationDiagram
-    AntlrLinker o-- JustificationDiagram
+    AntlrLinker -.up.|> Linker
+    SableccInitializer -.up.|> Initializer
+    SableccLinker -.up.|> Linker
+    SableccInitializer -up-|> DepthFirstAdapter
+    SableccLinker -up-|> DepthFirstAdapter
+    Linker o-- JustificationDiagram
+    Initializer o-- JustificationDiagram
 
 @enduml
