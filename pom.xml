@@ -80,9 +80,10 @@
                 <version>2.0-beta.2</version>
                 <executions>
                     <execution>
+                        <id>sablecc</id>
                         <configuration>
                             <grammar>src/main/sablecc/parsing/JustificationDiagram.sablecc</grammar>
-                            <destination>src/main</destination>
+                            <destination>${project.build.directory}/generated-sources/</destination>
                         </configuration>
                         <goals>
                             <goal>sablecc</goal>
