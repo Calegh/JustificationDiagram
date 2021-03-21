@@ -1,8 +1,10 @@
-package parsing;
+package parsing.antlr;
 
 import justificationDiagram.JustificationDiagram;
 import models.Relation;
 import models.RelationFactory;
+import parsing.JustificationDiagramBaseVisitor;
+import parsing.Linker;
 
 public class AntlrLinker extends JustificationDiagramBaseVisitor<String> implements Linker {
     public JustificationDiagram diagram;
@@ -17,16 +19,6 @@ public class AntlrLinker extends JustificationDiagramBaseVisitor<String> impleme
     }
 
     @Override
-    public String visitDiagram(JustificationDiagramParser.DiagramContext ctx) {
-        return super.visitDiagram(ctx);
-    }
-
-    @Override
-    public String visitDeclaration(parsing.JustificationDiagramParser.DeclarationContext ctx) {
-        return super.visitDeclaration(ctx);
-    }
-
-    @Override
     public String visitRelation(parsing.JustificationDiagramParser.RelationContext ctx) {
         Relation relation = RelationFactory.create(ctx.LINK().getText(), diagram.nodes.get(ctx.ALIAS(0).getText()),
                 diagram.nodes.get(ctx.ALIAS(1).getText()));
@@ -34,20 +26,5 @@ public class AntlrLinker extends JustificationDiagramBaseVisitor<String> impleme
         diagram.nodes.get(ctx.ALIAS(0).getText()).addOutput(relation);
         diagram.nodes.get(ctx.ALIAS(1).getText()).addInput(relation);
         return super.visitRelation(ctx);
-    }
-
-    @Override
-    public String visitInstruction(JustificationDiagramParser.InstructionContext ctx) {
-        return super.visitInstruction(ctx);
-    }
-
-    @Override
-    public String visitElement(JustificationDiagramParser.ElementContext ctx) {
-        return super.visitElement(ctx);
-    }
-
-    @Override
-    public String visitConclusion(JustificationDiagramParser.ConclusionContext ctx) {
-        return super.visitConclusion(ctx);
     }
 }

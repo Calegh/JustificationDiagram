@@ -4,12 +4,13 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
 import justificationDiagram.JustificationDiagram;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.cli.*;
 import parsing.*;
+import parsing.antlr.AntlrInitializer;
+import parsing.antlr.AntlrLinker;
+import parsing.sablecc.SableccInitializer;
+import parsing.sablecc.SableccLinker;
+
 import java.io.*;
 
 public class JDCompiler {
@@ -107,9 +108,9 @@ public class JDCompiler {
     }
 
     public static JustificationDiagram createDiagram(String file) {
-        Initializer factory = new AntlrInitializer();
+        Initializer factory = new SableccInitializer();
         JustificationDiagram diagram = factory.create(file);
-        Linker linker = new AntlrLinker(diagram);
+        Linker linker = new SableccLinker(diagram);
         return linker.link((file));
     }
 

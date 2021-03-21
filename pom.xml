@@ -23,11 +23,6 @@
             <version>2.0-beta.2</version>
         </dependency>
         <dependency>
-            <groupId>com.github.verylazyboy</groupId>
-            <artifactId>sablecc-maven-port</artifactId>
-            <version>3.7</version>
-        </dependency>
-        <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>4.8</version>

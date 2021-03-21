@@ -1,8 +1,11 @@
-package parsing;
+package parsing.antlr;
 
 import justificationDiagram.JustificationDiagram;
 import models.Conclusion;
 import models.NodeFactory;
+import parsing.Initializer;
+import parsing.JustificationDiagramBaseVisitor;
+import parsing.JustificationDiagramParser;
 
 public class AntlrInitializer extends JustificationDiagramBaseVisitor<String> implements Initializer {
     public JustificationDiagram diagram;
@@ -17,21 +20,6 @@ public class AntlrInitializer extends JustificationDiagramBaseVisitor<String> im
     public String visitDiagram(JustificationDiagramParser.DiagramContext ctx) {
         diagram = new JustificationDiagram();
         return super.visitDiagram(ctx);
-    }
-
-    @Override
-    public String visitDeclaration(JustificationDiagramParser.DeclarationContext ctx) {
-        return super.visitDeclaration(ctx);
-    }
-
-    @Override
-    public String visitRelation(JustificationDiagramParser.RelationContext ctx) {
-        return super.visitRelation(ctx);
-    }
-
-    @Override
-    public String visitInstruction(JustificationDiagramParser.InstructionContext ctx) {
-        return super.visitInstruction(ctx);
     }
 
     @Override

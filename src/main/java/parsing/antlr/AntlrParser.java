@@ -1,9 +1,11 @@
-package parsing;
+package parsing.antlr;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import parsing.JustificationDiagramLexer;
+import parsing.JustificationDiagramParser;
 
 import java.io.IOException;
 
