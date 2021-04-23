@@ -1,0 +1,5 @@
+@startuml
+
+strategy stat = "This is a strategy"
+
+@enduml

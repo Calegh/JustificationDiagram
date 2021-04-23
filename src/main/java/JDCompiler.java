@@ -80,7 +80,7 @@ public class JDCompiler {
     }
 
     private static boolean inputIsValid(String in) {
-        if (!in.matches(".*\\.(jd|txt)")) {
+        if (!in.matches(".*\\.(jd|txt|jdevops)")) {
             System.err.println(in + " is not a valid name. The input file should end with .jd or .txt");
             return false;
         }
@@ -113,5 +113,12 @@ public class JDCompiler {
         Linker linker = new SableccLinker(diagram);
         return linker.link((file));
     }
+
+/*    public static JustificationDiagram createDiagram(String file) {
+        Initializer factory = new AntlrInitializer();
+        JustificationDiagram diagram = factory.create(file);
+        Linker linker = new AntlrLinker(diagram);
+        return linker.link((file));
+    }*/
 
 }

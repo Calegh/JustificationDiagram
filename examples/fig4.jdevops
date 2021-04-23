@@ -1,0 +1,54 @@
+@startuml
+
+conclusion C = "Continuous integration is functional" - "Internal"
+strategy S = "Validate project automation"
+
+subconclusion C1 = "Project doesn't contain vulnerabilities"
+strategy S1 = "Validate project integrity"
+support SC = "SonarCloud scan"
+
+subconclusion C2 = "Project is logged"
+strategy S2 = "Validate project logs"
+support Im = "Image archives"
+support Co = "Source code"
+
+subconclusion C3 = "Project management is functional"
+strategy S3 = "Validate project builds"
+support MB = "Maven build"
+support MT = "Maven test"
+
+subconclusion C4 = "Project is documented"
+strategy S4 = "Validate documentation"
+support RM = "README found in project"
+
+subconclusion C5 = "Project is functional"
+strategy S5 = "Validate test coverage"
+support JCC = "Jacoco report"
+
+S --> C
+
+C1 --> S
+S1 --> C1
+SC --> S1
+
+C2 --> S
+S2 --> C2
+SC --> S2
+Im --> S2
+Co --> S2
+
+C3 --> S
+S3 --> C3
+MB --> S3
+MT --> S3
+
+C4 --> S
+S4 --> C4
+RM --> S4
+
+C5 --> S
+S5 --> C5
+JCC --> S5
+JCC --> S2
+
+@enduml

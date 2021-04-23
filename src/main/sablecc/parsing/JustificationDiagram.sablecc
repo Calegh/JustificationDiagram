@@ -4,11 +4,11 @@ Package sablecc.syntax;
 
 Helpers
 
-    letter = ['a'..'z'] + ['A'..'Z'];
+    letter = [['a'..'z'] + ['A'..'Z']];
     digit = ['0'..'9'];
     character = [0..0xFFFF];
     newline = 13 | 10 | 13 10;
-    tab = '9';
+    tab = 9;
     escape = '\';
     string_char = [character - [13 + 10]];
     not_escape_quote_string_char = [string_char - [escape + '"']];
@@ -17,21 +17,26 @@ Tokens
 
     start = '@startuml';
     end = '@enduml';
+    title = 'title';
     conclusion_tag = 'conclusion';
-    title = 'title ' (letter | digit | ' ')+ newline;
-    alias = (letter | digit)+;
-    link = ('-->' | '..>');
     type = ('subconclusion' | 'strategy' | 'rationale' | 'domain' | 'support');
-    string = '"' (not_escape_quote_string_char? (escape string_char)?)* '"';
-    whitespace = (' ' | newline | tab)+;
-    assign = '=';
+    link = ('-->' | '..>');
     separator = '-';
+    assign = '=';
+    string = '"' (not_escape_quote_string_char? (escape string_char)?)* '"';
+    alias = letter (letter | digit)*;
+    whitespace = (' ' | newline | tab)+;
 
+Ignored Tokens
+    whitespace;
 
 Productions
 
 diagram =
-    start title? instruction* end;
+    start header? instruction* end;
+
+header =
+    {title} title string;
 
 instruction =
     {declaration} declaration |
@@ -39,14 +44,14 @@ instruction =
 
 declaration =
     {element} element |
-    {conclusion} conclusion_tag;
+    {conclusion} conclusion;
 
 element =
     type alias assign [label]:string;
 
 conclusion =
-    {conclusion_without_restriction} conclusion alias assign [label]:string |
-    {conclusion_with_restriction} conclusion alias assign [label]:string separator [restriction]:string;
+    {conclusion_without_restriction} conclusion_tag alias assign [label]:string |
+    {conclusion_with_restriction} conclusion_tag alias assign [label]:string separator [restriction]:string;
 
 relation =
     [left]:alias link [right]:alias;

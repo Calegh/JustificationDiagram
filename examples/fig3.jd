@@ -1,6 +1,6 @@
 @startuml
 
-conclusion C = "Software safety validated" - "Internal"
+conclusion Co = "Software safety validated" - "Internal"
 strategy S = "Assess software safety"
 domain D = "Internal accreditation"
 rationale R = "Credentials for IEC 62304"
@@ -24,7 +24,7 @@ support J = "Identified risks"
 
 subconclusion C5 = "Feasible hard points"
 
-S --> C
+S --> Co
 D --> S
 R --> S
 
