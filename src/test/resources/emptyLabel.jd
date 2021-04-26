@@ -1,0 +1,5 @@
+@startuml
+
+conclusion C = "" - "Internal"
+
+@enduml

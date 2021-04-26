@@ -1,5 +1,7 @@
 @startuml
 
+title "Déploiement continue"
+
 conclusion C = "Continuous integration is functional" - "Internal"
 strategy S = "Validate project automation"
 

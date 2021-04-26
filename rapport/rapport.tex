@@ -1,0 +1,268 @@
+\documentclass[fleqn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+
+\lstdefinestyle{mystyle}{
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+\title{Projet de session}
+\author{Corinne Pulgar}
+\date{\today}
+
+\begin{document}
+
+    \begin{titlepage}
+    \begin{center}
+        \vspace*{2cm}
+    
+        \textbf{Création de langages informatiques}
+    
+            INF600E
+    
+        \vspace{2cm}
+    
+        \textbf{Corinne Pulgar}
+    
+            PULC26628901
+
+        \vspace{2cm}
+    
+            Projet de session\\
+            Rapport
+            
+        \vspace{2cm}
+    
+            Travail remis\\
+            à\\
+            Étienne M. Gagnon
+        
+        \vfill
+    
+        Université du Québec à Montréal\\
+        \today
+    
+        \vspace*{2cm}
+    \end{center}
+    \end{titlepage}
+    
+    \thispagestyle{empty}
+    \clearpage
+    \pagenumbering{arabic}
+    \setcounter{page}{1}
+
+    \section*{Règles sémantiques}
+    \begin{enumerate}
+        \item Tous les éléments doivent avoir un \verb'label' non vide.
+        \item La restriction d'une conclusion ne peut pas être une chaîne vide.
+        \item Un diagramme ne peut contenir qu'une seule \verb'conclusion'.
+        \item Une \verb'conclusion' ne peut mener vers un autre élément.
+        \item Il est impossible de faire un lien avec un élément non-déclaré.
+        \item Les \verb'domain', les \verb'rationale', les \verb'support' et les \verb'subconclusion' ne peuvent mener qu'à une \verb'strategy'.
+        \item Une \verb'strategy' peut seulement mener à une \verb'conclusion' ou à une \\ \verb'subconclusion'.
+        \item Tous les éléments du diagramme doivent être liés.
+        \item Le diagramme doit être un graphe acyclique.
+    \end{enumerate}
+
+    \bigskip
+    Dans l'implémentation présente, on valide le type des éléments de façon syntaxique seulement.
+    Il serait possible de le faire aussi sémantiquement mais il s'agirait pour l'instant d'une redondance.
+    
+    \bigskip
+    Les deux dernières règles ne sont pas encore implémentées.
+ 
+    \section*{Question 1}
+
+    Dans l'interpreteur, la notion de \verb'Scope' est remplacée par la notion de \verb'Frame'. Un \verb'Frame' contient toutes les informations relatives à une \verb'FunctionInfo' associée et aux variables déclarées dans ce cadre. Les \verb'Frames' sont consignés dans une pile : ils sont empilés à chaque appel de fonction et dépilés à la fin de ceux-ci. Un \verb'Frame' de base en empilé au début du programme principal pour faire office de \verb'main'. À l'appel d'une fonction, les paramètres de la fonctions sont ajoutés aux variables du nouveau \verb'Frame' avec leur nom de déclaration et la valeur dans l'appel. 
+    \bigskip
+
+    L'interpreteur ne regarde pas les déclaration de fonction et saute directement aux instructions du programme principal. On compte ici sur le fait que le vérificateur sémantique aura déjà créé les fonctions et vérifié leur validité. Au moment de l'appel, on récupéra le \verb'funBody' depuis le \verb'FunctionInfo' pour lancer l'exécution de la fonction.
+
+    \subsection*{Exemples des vérifications mise en place}
+
+    \subsubsection*{Appel avec un paramètre du mauvais type}
+    \begin{lstlisting}
+# proc printresult (1 param entier)
+fun printresult(i: int) {
+    print("The result is " + i);
+}
+
+# fonction max (2 params entiers, retourne entier)
+fun max(i: int, j: int):int {
+    if i > j then
+    return i;
+return j; }
+
+# programme principal
+var a = 3;
+var b = "allo";
+# ERREUR EST ICI (b est un string et doit etre un int)
+printresult(max(a,b));
+    \end{lstlisting}
+
+    \begin{lstlisting}
+SEMANTIC ERROR: [16:9] expected type INT but got STRING for param 2 of function max
+    \end{lstlisting}
+
+    \subsubsection*{Appel d'une fonction avec le mauvais nombre de paramètre}
+    \begin{lstlisting}
+# proc printresult (1 param entier)
+fun printresult(i: int) {
+    print("The result is " + i);
+}
+
+# fonction max (2 params entiers, retourne entier)
+fun max(i: int, j: int):int {
+    if i > j then
+    return i;
+return j; }
+
+# programme principal
+var a = 3;
+var b = 7;
+var c = max(a,b);
+# ERREUR EST ICI
+printresult(a, b, c);
+    \end{lstlisting}
+
+    \begin{lstlisting}
+SEMANTIC ERROR: [17:1] expected call with 1 but got 3
+    \end{lstlisting}
+
+    \begin{lstlisting}
+# proc printresult (1 param entier)
+fun printresult(i: int) {
+    print("The result is " + i);
+}
+
+# fonction max (2 params entiers, retourne entier)
+fun max(i: int, j: int):int {
+    if i > j then
+    return i;
+return j; }
+
+# programme principal
+var a = 3;
+var b = 7;
+# ERREUR EST ICI
+var c = max(a);
+printresult(c);
+    \end{lstlisting}
+        
+    \begin{lstlisting}
+SEMANTIC ERROR: [16:9] expected call with 2 but got 1
+    \end{lstlisting}
+
+    \subsubsection*{Ajout d'un return dans fonction sans retour (procédure)}
+    \begin{lstlisting}
+# proc printresult (1 param entier)
+fun printresult(i: int) {
+    print("The result is " + i);
+    return "test";
+}
+    \end{lstlisting}
+                
+    \begin{lstlisting}
+SEMANTIC ERROR: [4:5] cannot have a return in a procedure
+    \end{lstlisting}
+
+    \subsubsection*{Ajout d'un return dans fonction sans retour (procédure)}
+    \begin{lstlisting}
+# proc printresult (1 param entier)
+fun printresult(i: int) {
+    print("The result is " + i);
+    return "test";
+}
+    \end{lstlisting}
+                
+    \begin{lstlisting}
+SEMANTIC ERROR: [4:5] cannot have a return in a procedure
+    \end{lstlisting}
+
+
+    \subsubsection*{Fonction avec un type de retour sans return}
+    \begin{lstlisting}
+# proc printresult (1 param entier, 1 type de retour ?)
+fun printresult(i: int):int {
+    print("The result is " + i);
+}
+    \end{lstlisting}
+                
+    \begin{lstlisting}
+SEMANTIC ERROR: [2:5] cannot have a function with a return type and no return.
+    \end{lstlisting}
+
+    \subsubsection*{Retour d'un mauvais type}
+    \begin{lstlisting}
+# proc printresult (1 param entier)
+# fonction max (2 params entiers, retourne entier)
+fun max(i: int, j: int):int {
+    if i > j then
+    return "hello";
+return j; }
+    \end{lstlisting}
+                
+    \begin{lstlisting}
+SEMANTIC ERROR: [5:5] expected return to be INT but got STRING
+    \end{lstlisting}
+
+    \pagebreak
+    \section*{Question 2}
+
+    L'architecture de base du compilateur de code Java a été conservée. On aura seulement ajouté le code nécessaire au \verb'CodeGenerator' pour que les déclarations de fonctions soient traitées proprement. La gestion de l'indentation est ajoutée pour chaque fonction ou bloc de code. Le langage original n'étant pas un langage orienté-objet, la génération du code Java se fait dans une classe \verb'Main' et toutes les fonctions deviennent des méthodes \verb'static'. Le code en Java garde la même présentation avec les définitions des fonctions avant le programme principal qui est dans la méthode \verb'main'. La syntaxe initiale ignore les commentaires et la traduction en Java ne retient donc pas les commentaires.
+
+    \subsection*{Example de compilation en Java}
+    \begin{lstlisting}
+fun printresult(i: int) {
+    print("The result is " + i);
+}
+
+fun max(i: int, j: int):int {
+    if i > j then
+    return i;
+return j; }
+
+var a = 3;
+var b = 7;
+printresult(max(a,b));        
+    \end{lstlisting}
+                
+    \begin{lstlisting}
+class Main {
+
+    public static void printresult(int i) {
+        System.out.print(("The result is " + i));
+    }
+    
+    public static int max(int i, int j) {
+        if((i > j)) {
+        return i;
+        }
+        return j;
+    }
+    
+    public static void main(String[] args) {
+        int a = 3;
+        int b = 7;
+        printresult(max(a, b))
+    }
+}
+    \end{lstlisting}
+
+\end{document}

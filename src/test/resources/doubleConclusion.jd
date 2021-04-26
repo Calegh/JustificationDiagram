@@ -1,0 +1,17 @@
+@startuml
+
+conclusion C1 = "Software is ready for launch" - "Internal"
+strategy S = "Software is functionnal"
+domain D = "Internal"
+rationale R = "ISO 1234"
+support A = "JUnit test logs"
+support B = "Jenkins test logs"
+conclusion C2 = "Software is ready"
+
+S --> C1
+D --> S
+R --> S
+A --> S
+B --> S
+
+@enduml

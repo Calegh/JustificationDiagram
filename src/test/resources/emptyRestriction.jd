@@ -1,0 +1,5 @@
+@startuml
+
+conclusion C = "Software is ready for launch" - ""
+
+@enduml

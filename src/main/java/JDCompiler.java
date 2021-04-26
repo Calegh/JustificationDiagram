@@ -8,8 +8,12 @@ import org.apache.commons.cli.*;
 import parsing.*;
 import parsing.antlr.AntlrInitializer;
 import parsing.antlr.AntlrLinker;
-import parsing.sablecc.SableccInitializer;
-import parsing.sablecc.SableccLinker;
+import parsing.sablecc.*;
+import sablecc.syntax.lexer.Lexer;
+import sablecc.syntax.lexer.LexerException;
+import sablecc.syntax.node.Start;
+import sablecc.syntax.parser.Parser;
+import sablecc.syntax.parser.ParserException;
 
 import java.io.*;
 

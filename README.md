@@ -36,7 +36,7 @@ java -jar JDGenerator-jar-with-dependencies.jar [OPTIONS] FILE
 | -o    | path     | Output file (no extension)               |
 | -png  | -        | Generate visual graph                    |
 | -gv   | -        | Generate text files before dot formating |
-| -td | -        | Generate todo list                       |
+| -td   | -        | Generate todo list                       |
 
 If no output file is entered, the generated files will be named from the input file name. 
 

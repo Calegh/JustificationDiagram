@@ -1,5 +1,9 @@
 package parsing.sablecc;
 
+import parsing.sablecc.semanticAnalysis.SemanticException;
+import parsing.sablecc.semanticAnalysis.SemanticInfo;
+import parsing.sablecc.semanticAnalysis.SemanticLinkVerifier;
+import parsing.sablecc.semanticAnalysis.SemanticNodeVerifier;
 import sablecc.syntax.lexer.*;
 import sablecc.syntax.node.Start;
 import sablecc.syntax.parser.*;
@@ -14,19 +18,27 @@ public class SableccParser {
         try {
             Lexer lexer = new Lexer(new PushbackReader(new FileReader(file)));
             Parser parser = new Parser(lexer);
-            return parser.parse();
+            Start tree = parser.parse();
 
+            // Vérification sémantique
+            SemanticInfo semantics = new SemanticInfo();
+            tree.apply(new SemanticNodeVerifier(semantics));
+            tree.apply(new SemanticLinkVerifier(semantics));
+            return tree;
         } catch (FileNotFoundException e) {
-            System.err.println(file + " : file not found.");
+            System.err.println("File " + file + " not found.");
             System.exit(1);
         } catch (ParserException e) {
-            System.err.println("Syntax error : " + e.getMessage());
+            System.err.println("Syntax error: " + e.getMessage());
             System.exit(1);
         } catch (LexerException e) {
-            System.err.println("Lexical error : " + e.getMessage());
+            System.err.println("Lexer error: " + e.getMessage());
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("IO error : " + e.getMessage());
+            System.err.println("IO error: " + e.getMessage());
+            System.exit(1);
+        } catch (SemanticException e) {
+            System.err.println("Semantic error: " + e.getMessage());
             System.exit(1);
         }
         return null;

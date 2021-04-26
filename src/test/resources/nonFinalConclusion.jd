@@ -1,0 +1,8 @@
+@startuml
+
+conclusion C = "Software is ready for launch"
+strategy S = "Software is functionnal"
+
+C --> S
+
+@enduml
